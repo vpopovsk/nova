@@ -700,6 +700,7 @@ class LibvirtConfigGuest(LibvirtConfigObject):
         self.os_boot_dev = None
         self.os_smbios = None
         self.devices = []
+        self.pci_devices = []
 
     def _format_basic_props(self, root):
         root.append(self._text_node("uuid", self.uuid))
@@ -745,6 +746,27 @@ class LibvirtConfigGuest(LibvirtConfigObject):
             devices.append(dev.format_dom())
         root.append(devices)
 
+    def _format_pci_devices(self, root):
+        if len(self.pci_devices) == 0:
+            return
+        for pci_device in self.pci_devices:
+            dev = etree.Element("hostdev",
+                                mode='subsystem',
+                                type='pci',
+                                managed='yes')
+
+            address = etree.Element("address")
+            address.set("domain", pci_device.pci_domain)
+            address.set("bus", pci_device.pci_bus)
+            address.set("slot", pci_device.pci_slot)
+            address.set("function", pci_device.pci_function)
+
+            source = etree.Element("source")
+
+            source.append(address)
+            dev.append(source)
+            root.append(dev)
+
     def format_dom(self):
         root = super(LibvirtConfigGuest, self).format_dom()
 
@@ -765,6 +787,8 @@ class LibvirtConfigGuest(LibvirtConfigObject):
             root.append(self.cpu.format_dom())
 
         self._format_devices(root)
+
+        self._format_pci_devices(root)
 
         return root
 
