@@ -80,13 +80,15 @@ class LibvirtPciDriver(pci.PciDriver):
                 error="Did not found 'virtfnX' entry; is parent_pf wrong?")
 
     def pci_device_prepare_for_use(self, pci_dev):
-        global libvirt
-        if libvirt is None:
-            libvirt = __import__('libvirt')
+        #global libvirt
+        #if libvirt is None:
+        #    libvirt = __import__('libvirt')
 
         # The code below is not needed, in principle, because, as it turns out,
         # libvirt/KVM does all the necessary preparations.
         # So leaving it commented out only as a reference
+
+	return
 
         # First create a PCI device name in libvirt format: pci_0000_00_04_0
         pci_domain, pci_bus, pci_slot, pci_function = \
