@@ -220,7 +220,7 @@ class PciDriver(object):
         # Fetch all the currently-allocated devices on this host, and also
         # the devices allocated to this instance
         all_alloc_devices_dict, instance_alloc_devices_dict = \
-            self._find_allocated_pci_devices(instance['id'])
+            self._find_allocated_pci_devices(instance['uuid'])
 
         # Update the PCI allocation requirements, according to what is already
         # allocated to this instance
@@ -257,7 +257,7 @@ class PciDriver(object):
             for pci_dev in pci_devices_set:
                 LOG.info(_("    %(pci_dev)s") % locals())
 
-        self._commit_instance_pci_devices_allocation(instance['id'],
+        self._commit_instance_pci_devices_allocation(instance['uuid'],
             instance_alloc_devices_dict)
 
         # At this point it would be best to replace the appropriate
@@ -466,7 +466,7 @@ class PciDriver(object):
         # Note: at this point instance_type comes from joinedload with
         # instance, so extra_specs are not loaded
         extra_specs = db.instance_type_extra_specs_get(self._context,
-                                                       instance_type['id'])
+                                                       instance_type['flavorid'])
         if not extra_specs:
             return None
 
@@ -544,7 +544,7 @@ class PciDriver(object):
                                                            instance_dict)
 
             # Set the output for the instance
-            if instance_id == instance['id']:
+            if instance_id == instance['uuid']:
                 out_instance_dict = instance_dict
 
             # Update the global output with this instance's data

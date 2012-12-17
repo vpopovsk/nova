@@ -755,13 +755,13 @@ class LibvirtConfigGuest(LibvirtConfigObject):
                                 type='pci',
                                 managed='yes')
 
-            address = etree.Element("address")
-            address.set("domain", pci_device.pci_domain)
-            address.set("bus", pci_device.pci_bus)
-            address.set("slot", pci_device.pci_slot)
-            address.set("function", pci_device.pci_function)
-
             source = etree.Element("source")
+
+            address = etree.Element("address")
+            address.set("domain", pci_device['pci_domain'])
+            address.set("bus", pci_device['pci_bus'])
+            address.set("slot", pci_device['pci_slot'])
+            address.set("function", pci_device['pci_function'])
 
             source.append(address)
             dev.append(source)
